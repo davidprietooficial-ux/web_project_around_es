@@ -130,9 +130,7 @@ formElement.addEventListener("submit", handleProfileFormSubmit);
 
 // Construye el elemento de una tarjeta a partir de la plantilla
 function getCardElement(name, link) {
-  const cardElement = cardTemplate.content
-    .querySelector(`.card`)
-    .cloneNode(true);
+  const cardElement = cardTemplate.querySelector(`.card`).cloneNode(true);
 
   const cardTitle = cardElement.querySelector(".card__title");
   const cardImage = cardElement.querySelector(".card__image");
