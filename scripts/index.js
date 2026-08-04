@@ -35,6 +35,12 @@ const profileEditBtn = document.querySelector(".profile__edit-button");
 const editProfileModal = document.querySelector("#edit-popup");
 const profileCloseBtn = editProfileModal.querySelector(".popup__close");
 const formElement = editProfileModal.querySelector("#edit-profile-form");
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+const nameInput = editProfileModal.querySelector(".popup__input_type_name");
+const descriptionInput = editProfileModal.querySelector(
+  ".popup__input_type_description",
+);
 
 // ==========================================
 // REFERENCIAS AL DOM: LISTA Y PLANTILLA DE TARJETA
@@ -78,14 +84,8 @@ function closeModal(modal) {
 
 // Precarga los inputs con los datos actuales
 function fillProfileForm() {
-  const name = document.querySelector(".profile__title");
-  const description = document.querySelector(".profile__description");
-  const editName = document.querySelector(".popup__input_type_name");
-  const editDescription = document.querySelector(
-    ".popup__input_type_description",
-  );
-  editName.value = name.textContent;
-  editDescription.value = description.textContent;
+  nameInput.value = profileTitle.textContent;
+  descriptionInput.value = profileDescription.textContent;
 }
 
 // Abre el modal de edición ya con los campos precargados
@@ -98,19 +98,8 @@ function handleOpenEditModal() {
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  const nameInput = editProfileModal.querySelector(".popup__input_type_name");
-  const jobInput = editProfileModal.querySelector(
-    ".popup__input_type_description",
-  );
-
-  const newNameValue = nameInput.value;
-  const newDescriptionValue = jobInput.value;
-
-  const nameValue = document.querySelector(".profile__title");
-  const descriptionValue = document.querySelector(".profile__description");
-
-  nameValue.textContent = newNameValue;
-  descriptionValue.textContent = newDescriptionValue;
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = descriptionInput.value;
 
   closeModal(editProfileModal);
 }
@@ -129,7 +118,10 @@ formElement.addEventListener("submit", handleProfileFormSubmit);
 // ==========================================
 
 // Construye el elemento de una tarjeta a partir de la plantilla
-function getCardElement(name, link) {
+function getCardElement({
+  name = "Sin título",
+  link = "images/placeholder.jpg",
+} = {}) {
   const cardElement = cardTemplate.querySelector(`.card`).cloneNode(true);
 
   const cardTitle = cardElement.querySelector(".card__title");
@@ -150,10 +142,17 @@ function getCardElement(name, link) {
   return cardElement;
 }
 
-// Crea una tarjeta y la agrega al contenedor indicado
-function renderCard(name, link, cardContainer) {
-  const cardElement = getCardElement(name, link);
-  cardContainer.prepend(cardElement);
+// Crea una tarjeta y la agrega al contenedor indicado.
+// "append" la ubica al final (conserva el orden del array);
+// "prepend" la ubica al comienzo (para las tarjetas nuevas del usuario).
+function renderCard(name, link, cardContainer, method = "prepend") {
+  const cardElement = getCardElement({ name, link });
+
+  if (method === "append") {
+    cardContainer.append(cardElement);
+  } else {
+    cardContainer.prepend(cardElement);
+  }
 }
 
 // ==========================================
@@ -168,7 +167,7 @@ function handleOpenNewCardModal() {
 // Crea la tarjeta a partir de los inputs del formulario y cierra el popup
 function handleCardFormSubmit(evt) {
   evt.preventDefault();
-  renderCard(placeNameInput.value, placeLinkInput.value, cardsList);
+  renderCard(placeNameInput.value, placeLinkInput.value, cardsList, "prepend");
   newCardForm.reset();
   closeModal(newCardPopup);
 }
@@ -185,7 +184,7 @@ newCardForm.addEventListener("submit", handleCardFormSubmit);
 // INICIALIZACIÓN: renderiza las tarjetas iniciales
 // ==========================================
 initialCards.forEach(function ({ name, link }) {
-  renderCard(name, link, cardsList);
+  renderCard(name, link, cardsList, "append");
 });
 
 // ==========================================
@@ -194,7 +193,7 @@ initialCards.forEach(function ({ name, link }) {
 
 function handleLikeButtonClick(evt) {
   const likeButton = evt.target;
-  likeButton.classList.toggle("card__like-button_active");
+  likeButton.classList.toggle("card__like-button_is-active");
 }
 
 // ==========================================
