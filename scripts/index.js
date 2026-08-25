@@ -1,3 +1,8 @@
+import {
+  setEventListeners,
+  toggleButtonState,
+  resetValidation,
+} from "./validate.js";
 // ==========================================
 // DATOS INICIALES DE LAS TARJETAS
 // ==========================================
@@ -72,10 +77,12 @@ const imagePopupCloseBtn = imagePopup.querySelector(".popup__close");
 // ==========================================
 function openModal(modal) {
   modal.classList.add("popup_is-opened");
+  document.addEventListener("keydown", handleEscClose);
 }
 
 function closeModal(modal) {
   modal.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", handleEscClose);
 }
 
 // ==========================================
@@ -225,3 +232,39 @@ function handleCardImageClick(name, link) {
 imagePopupCloseBtn.addEventListener("click", function () {
   closeModal(imagePopup);
 });
+
+// ==========================================
+// VALIDACIÓN DE FORMULARIOS
+// ==========================================
+
+const inputsProfileEdit = formElement.querySelectorAll(".popup__input");
+const profileSubmitBtn = formElement.querySelector(".popup__button");
+const inputsNewPlace = newCardForm.querySelectorAll(".popup__input");
+const newPlaceSubmitBtn = newCardForm.querySelector(".popup__button");
+
+toggleButtonState(inputsNewPlace, newPlaceSubmitBtn);
+
+const allPopups = document.querySelectorAll(".popup");
+
+let openedPopup = null; //revisar que un modal esté abierto
+
+setEventListeners(inputsProfileEdit, profileSubmitBtn);
+
+setEventListeners(inputsNewPlace, newPlaceSubmitBtn);
+
+function closeOverlayUpponOutsideClick(evt) {
+  if (evt.target === evt.currentTarget) {
+    closeModal(evt.currentTarget);
+  }
+}
+
+allPopups.forEach((popup) => {
+  popup.addEventListener("click", closeOverlayUpponOutsideClick);
+});
+
+function handleEscClose(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_is-opened");
+    closeModal(openedPopup);
+  }
+}
