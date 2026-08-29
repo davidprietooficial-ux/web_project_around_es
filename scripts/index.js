@@ -176,6 +176,7 @@ function handleCardFormSubmit(evt) {
   evt.preventDefault();
   renderCard(placeNameInput.value, placeLinkInput.value, cardsList, "prepend");
   newCardForm.reset();
+  resetValidation(inputsNewPlace, newPlaceSubmitBtn);
   closeModal(newCardPopup);
 }
 
@@ -245,8 +246,6 @@ const newPlaceSubmitBtn = newCardForm.querySelector(".popup__button");
 toggleButtonState(inputsNewPlace, newPlaceSubmitBtn);
 
 const allPopups = document.querySelectorAll(".popup");
-
-let openedPopup = null; //revisar que un modal esté abierto
 
 setEventListeners(inputsProfileEdit, profileSubmitBtn);
 
