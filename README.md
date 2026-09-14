@@ -1,49 +1,55 @@
 # Tripleten web_project_around_es
 
-Una página web pensada como galería de locaciones de cine memorables. El perfil es editable, las tarjetas se generan dinámicamente a partir de un array de datos y cada una responde a la interacción: dar like, eliminarse o abrir su imagen en grande.
+Una página web pensada como galería de locaciones de cine memorables. El perfil es editable, las tarjetas se generan dinámicamente a partir de un array de datos y cada una responde a la interacción: dar like, eliminarse o abrir su imagen en grande. En esta etapa, toda la lógica se reescribió en TypeScript aplicando programación orientada a objetos: cada responsabilidad vive en su propia clase.
 
 # Sobre el proyecto
 
-La interfaz muestra un bloque de perfil y una grilla de locaciones. Las tarjetas no están escritas a mano en el HTML: se construyen desde JavaScript recorriendo el array initialCards y clonando una plantilla, de modo que agregar una locación nueva es agregar un objeto más al flujo de datos.
+La interfaz muestra un bloque de perfil y una grilla de 6 locaciones. Las tarjetas no están escritas a mano en el HTML: la clase `Card` las construye a partir del array `initialCards`, y la clase `Section` se encarga de renderizarlas en su contenedor. Agregar una locación nueva es agregar un objeto más al array que consume `Section`.
 
-Sobre esa base se montan las interacciones de la etapa final: los popups de edición de perfil y de nueva tarjeta escriben y leen del DOM, el botón de like alterna su estado visual, el botón de eliminar quita la tarjeta de la grilla y el clic sobre una imagen la abre ampliada junto a su nombre. La maqueta es responsiva, mantiene la organización por bloques BEM, y los formularios validan sus campos en tiempo real antes de permitir el envío.
+Sobre esa base se montan las interacciones: `UserInfo` lee y actualiza los datos del perfil, `PopupWithForm` maneja tanto la edición de perfil como el alta de tarjetas, `PopupWithImage` abre la imagen ampliada, y `FormValidator` valida los formularios en tiempo real antes de permitir el envío. `Popup` es la clase padre que centraliza la lógica común de apertura/cierre (clic fuera, tecla Esc) para sus dos subclases. Ninguna clase instancia a otra internamente — el ensamblaje ocurre en `index.ts`.
 
 # Estructura del proyecto
 
 index.html
 index.css
+index.ts
+src/
+Card.ts
+Section.ts
+Popup.ts
+PopupWithForm.ts
+PopupWithImage.ts
+FormValidator.ts
+UserInfo.ts
 blocks/ — bloques BEM
 images/
-scripts/
-index.js
-validate.js
 README.md
 
 # Stack
 
-HTML5 — marcado semántico organizado en bloques BEM, con un template para la estructura de las tarjetas.
-CSS3 — normalize.css importado antes de los estilos propios, layout responsivo con Flexbox y Grid, y estados de interacción (:hover).
-JavaScript (ES6) — manipulación del DOM, manejo de eventos con addEventListener(), clonado de plantillas, recorrido de arrays con forEach() y organización en módulos: index.js importa setEventListeners y resetValidation desde validate.js.
-Metodologías — BEM para nombrar clases y una estructura modular por bloques.
+TypeScript — clases ES6, una por archivo, importadas a `index.ts`.
+HTML5 — marcado semántico en bloques BEM; los popups están en el HTML, no se generan dinámicamente.
+CSS3 — normalize.css, layout responsivo con Flexbox y Grid, estados `:hover`.
+POO — herencia (`Popup` → `PopupWithForm`, `PopupWithImage`), acoplamiento débil, responsabilidad única por clase.
+Metodologías — BEM para nombrar clases, estructura modular por archivo/clase.
 
 # Qué se construyó en esta etapa
 
-Renderizado dinámico de las tarjetas a partir del array initialCards.
-Editar perfil: el popup carga los valores actuales de nombre y ocupación, y al guardar los refleja en la página.
-Agregar tarjeta: el formulario recibe título y enlace de imagen, la nueva locación se suma a la grilla, y también se puede confirmar pulsando Enter mientras el campo de texto está activo.
-Like: el corazón de cada tarjeta alterna entre estado activo e inactivo.
-Eliminar tarjeta: el ícono de papelera retira la tarjeta de la grilla.
-Imagen ampliada: al hacer clic sobre la foto se abre un popup con la imagen a mayor tamaño y su nombre.
-Los tres popups (perfil, nueva tarjeta e imagen) comparten la misma lógica de apertura y cierre: se cierran con clic fuera del formulario o con la tecla Esc, y el listener de Esc se agrega al abrir cada popup y se retira al cerrarlo.
-Validación en tiempo real: una función universal valida cada campo combinando los atributos HTML5 y la propiedad ValidityState, y una función aparte activa o desactiva el botón de envío según el estado del formulario.
+Migración completa de JS plano a TypeScript con clases ES6.
+`Card` y `Section`: instancia de `Card` por cada tarjeta, instancia de `Section` por cada contenedor renderizado.
+`FormValidator`: una instancia por formulario a validar; `enableValidation()` la activa; función separada controla el estado del botón submit (deshabilitado si algún campo falla).
+`UserInfo`: instancia única para leer/escribir los datos de perfil.
+`Popup` como clase padre de `PopupWithForm` y `PopupWithImage`: cierran con clic fuera del formulario o Esc, nunca con clic dentro; el listener de Esc se agrega al abrir el popup y se remueve al cerrarlo.
+Like y eliminar tarjeta siguen funcionales; alta de tarjeta soporta Enter mientras el campo de texto está activo.
+Optimización: sin `innerHTML` con datos de usuario, sin código duplicado, sin números mágicos (todo valor numérico en variable), `let` solo donde el valor cambia.
 
 # Convenciones de código
 
-camelCase para funciones y variables.
-Nombres descriptivos, en sustantivos, sin abreviaturas confusas; variables con datos parecidos llevan nombres únicos.
-El script se carga al final del body, después del marcado que manipula, con type="module".
-La consola queda limpia: index.html se abre sin errores.
-Las imágenes incluyen atributos alt con descripciones en español.
+camelCase para funciones y variables; sustantivos para variables, sustantivos plurales para NodeList.
+Nombres descriptivos y únicos cuando hay variables con datos similares; funciones nombradas con verbo, sin abreviaturas confusas.
+Cada clase en su propio archivo TS dentro de `src/`, con una única responsabilidad.
+Sin instanciación cruzada entre clases (acoplamiento débil).
+Operaciones sobre el DOM resueltas antes de insertarse en el layout.
 
 # Enlaces
 

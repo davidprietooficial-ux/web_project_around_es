@@ -1,0 +1,23 @@
+{
+  "name": "web_project_around_es",
+  "version": "1.0.0",
+  "description": "Una página web pensada como galería de locaciones de cine memorables. El perfil es editable, las tarjetas se generan dinámicamente a partir de un array de datos y cada una responde a la interacción: dar like, eliminarse o abrir su imagen en grande. En esta etapa, toda la lógica se reescribió en TypeScript aplicando programación orientada a objetos: cada responsabilidad vive en su propia clase.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidprietooficial-ux/web_project_around_es.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidprietooficial-ux/web_project_around_es/issues"
+  },
+  "homepage": "https://github.com/davidprietooficial-ux/web_project_around_es#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}

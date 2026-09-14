@@ -1,0 +1,1 @@
+{"version":3,"file":"validate.d.ts","sourceRoot":"","sources":["../../src/scripts/validate.js"],"names":[],"mappings":"AAAA,wBAAgB,cAAc,CAAC,OAAO,KAAA,EAAE,YAAY,KAAA,QAKnD;AAED,wBAAgB,cAAc,CAAC,OAAO,KAAA,QAKrC;AAQD,wBAAgB,iBAAiB,CAAC,SAAS,KAAA,EAAE,aAAa,KAAA,QAMzD;AAED,wBAAgB,eAAe,CAAC,SAAS,KAAA,EAAE,aAAa,KAAA,QAGvD;AAED,wBAAgB,iBAAiB,CAAC,WAAW,KAAA,EAAE,aAAa,KAAA,QAW3D"}
